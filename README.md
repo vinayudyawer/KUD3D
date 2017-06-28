@@ -1,2 +1,2 @@
 # 3DKUD-visualisation
-A series of R codes to calculate centre of activity, estimate 3DKUD and interactively visualise 3D KUD models.
+A series of R scritps to estimate and interactively visualise 3D KUD models for passive acoustic telemetry datasets.
