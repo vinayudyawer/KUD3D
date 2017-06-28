@@ -173,7 +173,8 @@ write4D(scene=scene, fnames=fnames, outfile=outfile, visible=c(T,T,T,F,F,F),
 rgl.close()
 
 ### create reciever, 3DKUD .stl files to replace dummy files in 'Example' folder
-### you may get some warning messages after executing writeSTL() function, but you can ignore these
+### you may get some warning messages after executing writeSTL() function, but you can ignore these,
+### R is just warns that the text associated with rgl outputs will not be included in the .stl outputs
 setwd("~/Desktop/Example")
 plot3d(recievers@coords[,1]-xlim[1], recievers@coords[,2]-ylim[1], -recievers$rec_depth*mul, type="s", col=1, add=T, size=1)
 writeSTL("stat.stl"); rgl.close()
@@ -188,7 +189,7 @@ plot(fhat.rescale, cont=95, colors=2, approx.cont=T, drawpoints=F, add=F, axes=F
 writeSTL("kud95.stl", pointRadius=0); rgl.close()
 
 
-###### Now open the index.html file with a web browser (Chrome or Safari recommended) in the 'Example' folder on your desktop
+### Now open the index.html file with a web browser (Chrome or Safari recommended) in the 'Example' folder on your desktop
 ### you can modify the appearance and background color of final interactive models by modifying .html code in the index.html file
 ### let me know if you need help with modifying the .html code
 
