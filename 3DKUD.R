@@ -15,11 +15,11 @@ summary(tagdata)
 
 ## Station information metadata
 ll<-CRS("+proj=longlat +datum=WGS84"); utm<-CRS("+init=epsg:32755")
-statinfo<-read.csv("~/...csv",header=TRUE,sep=",",strip.white=T) 
+statinfo<-read.csv("~/../statinfo.csv",header=TRUE,sep=",",strip.white=T) 
 stat<-statinfo; coordinates(stat)<-~longitude+latitude; projection(stat)<-ll; stat<-spTransform(stat,utm)
 
 ## Bathymetry data
-dep<-read.csv("~/Dropbox/GRS-STS paper/TSVReef100.csv", sep=",", header=T, strip.white=T)
+dep<-read.csv("~/.../TSVReef100.csv", sep=",", header=T, strip.white=T)
 dep[dep$depth>0,"depth"]<-dep[dep$depth>0,"depth"]/10 ## reduce topography of islands (depth exaggeration)
 s <- data.frame(X=dep$X, Y=dep$Y, Z=-dep$depth)
 xa<-sort(unique(s$X)); ya<- sort(unique(s$Y)); za<-as.matrix(cast(s,X~Y, value="Z")) 
