@@ -1,0 +1,325 @@
+
+<html>
+<!-- WebGL Export for 3D Slicer4 powered by XTK -- http://goXTK.com -->
+  <head>
+    <title>WebGL Export</title>
+    <script type="text/javascript" src="xtk_edge.js"></script>
+    <script type="text/javascript">
+      var run = function() {
+
+        renderer0 = new X.renderer3D();
+        renderer0.container = 'r0';
+        renderer0.init();
+
+        scene = new X.object();
+        // %ADDBRAIN%
+
+        Hierarchy = new X.object();
+        scene.children.push(Hierarchy);
+        
+
+        ROI1= new X.mesh();
+        ROI1.file = 'base.stl';
+        ROI1.visible = true;
+        scene.children.push(ROI1);
+        ROI1.caption = 'Bathymetry';
+        ROI1.color = [1.9921875, 1.78125, 1.4140625];
+        ROI1.opacity = 0.9;
+
+        ROI2= new X.mesh();
+        ROI2.file = 'top.stl';
+        ROI2.visible = true;
+        scene.children.push(ROI2);
+        ROI2.caption = 'Surface';
+        ROI2.color = [1.3515625, 1.6875, 1.796875];
+        ROI2.opacity = 0.1;
+
+        ROI3= new X.mesh();
+        ROI3.file = 'stat.stl';
+        ROI3.visible = true;
+        scene.children.push(ROI3);
+        ROI3.caption = 'Recievers';
+        ROI3.color = [0, 0, 0];
+        ROI3.opacity = 1;
+
+        ROI4= new X.mesh();
+        ROI4.file = 'grsp.stl';
+        ROI4.visible = false;
+        scene.children.push(ROI4);
+        ROI4.caption = 'Estimated smoothed positions';
+        ROI4.color = [1.9921875, 0.9921875, 0.625];
+        ROI4.opacity = 0.9;
+
+        ROI5= new X.mesh();
+        ROI5.file = 'grs50k.stl';
+        ROI5.visible = false;
+        scene.children.push(ROI5);
+        ROI5.caption = 'Core activity space (50%3DKUD)';
+        ROI5.color = [1.9921875, 0.9921875, 0.625];
+        ROI5.opacity = 0.9;
+
+        ROI6= new X.mesh();
+        ROI6.file = 'grs95k.stl';
+        ROI6.visible = false;
+        scene.children.push(ROI6);
+        ROI6.caption = 'Extent of activity space (95%3DKUD)';
+        ROI6.color = [1.9921875, 0.9921875, 0.625];
+        ROI6.opacity = 0.5;
+
+        ROI7= new X.mesh();
+        ROI7.file = 'stsp.stl';
+        ROI7.visible = false;
+        scene.children.push(ROI7);
+        ROI7.caption = 'Estimated smoothed positions';
+        ROI7.color = [0.9921875, 1.9921875, 1.65625];
+        ROI7.opacity = 0.9;
+
+        ROI8= new X.mesh();
+        ROI8.file = 'sts50k.stl';
+        ROI8.visible = false;
+        scene.children.push(ROI8);
+        ROI8.caption = 'Core activity space (50%3DKUD)';
+        ROI8.color = [0.9921875, 1.9921875, 1.65625];
+        ROI8.opacity = 0.9;
+
+        ROI9= new X.mesh();
+        ROI9.file = 'sts95k.stl';
+        ROI9.visible = false;
+        scene.children.push(ROI9);
+        ROI9.caption = 'Extent of activity space (95%3DKUD)';
+        ROI9.color = [0.9921875, 1.9921875, 1.65625];
+        ROI9.opacity = 0.5;
+
+        ROI10= new X.mesh();
+        ROI10.file = 'rising.stl';
+        ROI10.visible = false;
+        scene.children.push(ROI10);
+        ROI10.caption = 'Rising tide';
+        ROI10.color = [0, 0, 0];
+        ROI10.opacity = 1;
+
+        ROI11= new X.mesh();
+        ROI11.file = 'falling.stl';
+        ROI11.visible = false;
+        scene.children.push(ROI11);
+        ROI11.caption = 'Falling tide';
+        ROI11.color = [0 ,0 ,0];
+        ROI11.opacity = 1;
+
+        renderer0.add(scene);
+        renderer0.camera.position = [-3000, 0.0, 1000];
+        renderer0.camera.up = [0.0, 0.0, 1.0];
+        renderer0.render();
+
+
+
+      };
+ROIS = ['ROI2', 'ROI3', 'ROI4', 'ROI5', 'ROI6', 'ROI7', 'ROI8', 'ROI9', 'ROI10', 'ROI11'];
+brains = ['ROI1'];
+function GetSelectedItem() {
+
+	chosen = ""
+	len = document.f1.r2.length;
+	if(typeof len == 'undefined') {
+		len = 1;
+	}
+	doc = document.f1.r2;
+	console.log("len = " + len);
+
+	for (i = 0; i < len; i++) {
+		obj = document.f1.r2[i];
+		if (len == 1) obj = document.f1.r2;
+		check = obj.value;
+		console.log("check = " + check);
+
+        	    o = eval(check);
+	            o.visible = false;
+		
+		if (obj.checked) {
+			chosen = obj.value;
+            o = eval(chosen);
+            o.visible = true;
+            // o.opacity = 1;
+		console.log("o = " + o);
+		console.log("o.opacity = " + o.opacity);
+					
+		}
+	}
+	
+}
+
+function GetradioSelectedItem() {
+
+	chosen = ""
+	len = document.f1.r1.length;
+	if(typeof len == 'undefined') {
+		len = 1;
+	}	
+	// start with 1 because first is the brain
+	for (i = 0; i <len; i++) {
+		check = document.f1.r1[i].value
+        	    o = eval(check);
+	            o.visible = false;
+		if (document.f1.r1[i].checked) {
+			chosen = document.f1.r1[i].value
+		}
+	}
+	
+	if (chosen == "") {
+		alert("No Location Chosen")
+	}
+	else {
+            o = eval(chosen);
+            o.visible = true;
+            o.opacity = 1;
+	}
+}
+
+function GetSliderItem(sliderID) {
+    var y = document.getElementById(sliderID);
+    var val = ['ROI' + y.value];
+	for (iroi in ROIS) {
+		o = eval(ROIS[iroi]);
+		if (ROIS[iroi] != val){
+		console.log("o = " + o);            
+		console.log("iroi = " + iroi);
+		o.visible = false;
+		// o.opacity = 1.0;
+		} else {
+			o.visible = true;
+		}
+	}    
+
+};
+		
+		  function highlight(what) {
+		    
+		    document.getElementById('all').style.backgroundColor = '#000000';
+		    document.getElementById('ROIS').style.backgroundColor = '#000000';
+		    document.getElementById('brains').style.backgroundColor = '#000000';
+		    
+		    document.getElementById(what).style.backgroundColor = '#736AFF';
+		    
+		  };
+
+		  function show(whatstring, opac) {
+		        
+		    // highlight the div
+		    //    highlight(whatstring); 
+		    
+		    if (whatstring == 'all') {		      
+		      
+		      // show everything
+		      scene.opacity = opac;
+		      scene.visible = true;
+		      
+		    } else {
+		      
+		      // show specific anatomy
+          		what = eval(whatstring);
+		        what.opacity = opac;
+		        what.visible = true;     
+ 			console.log("what = " + what);
+			    
+		    }
+		    
+		  };
+		  
+
+		  
+		  function toggleCheckBox() {
+		    
+		    document.getElementById('showOverlay').checked = !document.getElementById('showOverlay').checked;		    
+		    
+		  };
+		  
+        function printValue(sliderID, textbox) {
+            var x = document.getElementById(textbox);
+            var y = document.getElementById(sliderID);
+            x.value = y.value;
+        };
+
+		  function show2(sliderID, textbox) {
+	            var x = document.getElementById(textbox);
+	            var y = document.getElementById(sliderID);
+		    val = y.value;
+			console.log("scene = " + scene);
+			//scene.opacity = 0;
+/*
+			console.log("brains[1] = " + brains[1]);
+			brains.visible = true;
+			console.log("brains = " + brains);
+			show(brains, 0.5);
+*/
+			for (o in ROIS) {
+				o = eval(ROIS[o]);
+				o.visible = false;
+				// o.opacity = 1.0;
+			}
+
+			//show(brains, 0.5);
+			low = Math.floor(val);
+			op_low = 1 - (val - low);
+			chosen = ROIS[low];
+		        show(chosen, op_low);
+			console.log("low = " + chosen);
+			console.log("op_low = " + op_high);
+/*
+			for (o in ROIS) {
+				console.log("o = ", o);
+			}
+*/
+
+			high = Math.ceil(val);
+
+			op_high = val - low;
+			chosen = ROIS[high];
+			x.value = chosen;
+			show(chosen, op_high);
+			console.log("high = " + chosen);
+			console.log("op_high = " + op_high);
+
+		};
+
+		
+function opac_brain(sliderID, textbox) {
+            var x = document.getElementById(textbox);
+            var y = document.getElementById(sliderID);
+    var val = y.value;
+    x.value = val;
+	low = Math.floor(val);
+	op_low = (val - low);
+	ROI1.opacity = op_low;
+	ROI1.visible = true;
+};
+    </script>
+  </head>
+  <body style="margin:0px; padding:0px;" onload="run()">
+        <div id="r0" style="background-color: #d9d9d9;; width: 100%; height: 75%;"></div>
+
+Bathymetry transparency <input id="slider_brain" type="range" min="0.01" max="0.99" step="0.01" value=“0.80” onchange="opac_brain('slider_brain','range_brain');"/>
+<input id="range_brain" type="text" size="10"/>
+
+<FORM NAME = f1>
+<P align="center">
+<Input type = checkbox Name = r2 , Value = "ROI1" onClick = GetSelectedItem() checked>Bathymetry
+<Input type = checkbox Name = r2 , Value = "ROI2" onClick = GetSelectedItem() checked>Surface
+<Input type = checkbox Name = r2 , Value = "ROI3" onClick = GetSelectedItem() checked>Receivers
+<P align="center">
+Grey Reef Shark:
+<Input type = checkbox Name = r2 , Value = "ROI4" onClick = GetSelectedItem() >Estimated smoothed positions
+<Input type = checkbox Name = r2 , Value = "ROI5" onClick = GetSelectedItem() >Core activity space (50%3DKUD)
+<Input type = checkbox Name = r2 , Value = "ROI6" onClick = GetSelectedItem() >Extent of activity space (95%3DKUD)
+<P align="center">
+Silvertip Shark:
+<Input type = checkbox Name = r2 , Value = "ROI7" onClick = GetSelectedItem() >Estimated smoothed positions
+<Input type = checkbox Name = r2 , Value = "ROI8" onClick = GetSelectedItem() >Core activity space (50%3DKUD)
+<Input type = checkbox Name = r2 , Value = "ROI9" onClick = GetSelectedItem() >Extent of activity space (95%3DKUD)
+<P align="center">
+eReefs GBR1 3D Hydrodynamic models:
+<Input type = checkbox Name = r2 , Value = "ROI10" onClick = GetSelectedItem() >Rising tide
+<Input type = checkbox Name = r2 , Value = "ROI11" onClick = GetSelectedItem() >Falling tide
+</P>
+</FORM>
+  </body>
+</html>
