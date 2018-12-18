@@ -1,11 +1,13 @@
 Package: KUD3D
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Visualising animal telemetry data in three dimensions
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Date: 2018-12-18
+Author: Vinay Udyawer
+Maintainer: Vinay Udyawer <v.udyawer@aims.gov>
+Description: This package provides helper functions to calculate and visualise 3D activity spaces from animal tracking data using the rayshader package 
+Depends: R (>= 3.2.0), ks, rayshader, dplyr, lubridate
+Imports: ks, rayshader, dplyr, lubridate
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
