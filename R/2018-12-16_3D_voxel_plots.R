@@ -10,10 +10,9 @@ sapply(c("ks",
          "tidyverse",
          "lubridate",
          "sf",
-         "rayshader"), 
+         "rayshader",
+         "ATT"), 
        require, character.only = TRUE)
-
-library(ATT)
 
 #######################
 ## Input files
@@ -21,26 +20,27 @@ library(ATT)
 ll<-CRS("+proj=longlat +datum=WGS84"); utm<-CRS("+init=epsg:32755")
 
 ## Station information
-statinfo<-read_csv(file.choose()) 
-stat<-
-  statinfo %>%
-  filter(Array %in% "Heron") %>%
-  st_as_sf(coords=c("Longitude", "Latitude"), crs=as.character(ll)) %>%
-  st_transform(crs = as.character(utm)) %>%
-  as_Spatial()
+statinfo<-readRDS("data/statinfo.RDS")
 
-## Animal detection data (I used the tagdata you provided 1183vKUD_PAV_tideadj_.csv)
-data <- read_csv(file.choose())
+## Tag metadata information
+taginfo<-readRDS("data/taginfo.RDS")
 
-COA <-
-  data %>%
-  mutate(Z = -TDepth) %>%
-  filter(!is.na(meanlat)) %>%
-  st_as_sf(coords=c("meanlong","meanlat"), crs=as.character(ll)) %>%
-  st_transform(crs=as.character(utm)) %>%
-  as_Spatial()
+## Detection data
+tagdata <- readRDS("data/tagdata.RDS")
+
+## Calculate COA using the Animal Tracking Toolbox
+ATTdata<-setupData(Tag.Detections = tagdata,
+                   Tag.Metadata = taginfo,
+                   Station.Information = statinfo,
+                   source = "VEMCO")
+
+abacusPlot(ATTdata, facet=T)
+
+COAdata <- COA(ATTdata = ATTdata,
+               timestep = 60)
 
 ## Bathymetry data
+gbr30<-raster(file.choose(), crs=ll)
 bath_ras <- raster(file.choose(), crs=ll)   ## ascii file with heron raster also works for opal raster
 bath_ras_u <- projectRaster(bath_ras, crs=utm)
 bath_ras_utm <- disaggregate(bath_ras_u, fact = 3, method = 'bilinear') ## increase resolution of raster to ~10 m per pixel
