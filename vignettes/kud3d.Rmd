@@ -124,6 +124,29 @@ lodestone_utm <-
 ```
 
 
+Calculate the 3D KUD using the `ks` package
+
+```{r, eval=TRUE}
+tag <-
+  tag_utm %>%
+  as_Spatial() %>% as.tibble() %>%
+  transmute(X = coords.x1,
+            Y = coords.x2,
+            depth = Sensor.Value.coa) %>%
+  as.matrix
+
+H.pi <- Hpi(tag, binned = TRUE) * 3
+fhat <- kde(tag, H = H.pi)
+```
+
+We can use the vol3d function in the `KUD3D` package to calculate volume of KUD voxels
+
+
+```{r, eval=TRUE}
+vol3d(fhat, cont = 50) ## in m3
+vol3d(fhat, cont = 95)
+
+```
 
 
 

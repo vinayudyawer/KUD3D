@@ -34,7 +34,7 @@ ATTdata<-setupData(Tag.Detections = tagdata,
                    Station.Information = statinfo,
                    source = "VEMCO")
 
-abacusPlot(ATTdata, facet=T)
+# abacusPlot(ATTdata, facet=T)
 
 COAdata <- COA(ATTdata = ATTdata,
                timestep = 60)
@@ -75,47 +75,69 @@ lodestone_utm <-
 ## 3D KUD calculations
 #######################
 
+### Process tag data to
+# 1) adjust depth measures based on bathymetry
+# 2) calculate spline trajectories
+
 tag <-
   tag_utm %>%
-  as_Spatial() %>% as.tibble() %>%
+  as_Spatial() %>%
+  as.tibble() %>%
   transmute(X = coords.x1,
             Y = coords.x2,
-            depth = Sensor.Value.coa) %>%
-  as.matrix
+            depth = -Sensor.Value.coa,
+            dt = TimeStep.coa) %>%
+  mutate(upper = 0,
+         lower =
+           raster::extract(
+           x = lodestone_utm,
+           y = as_Spatial(tag_utm),
+           method='bilinear'),
+         Z = case_when(
+           depth <= lower ~  lower-(depth-lower),
+           depth > lower ~ depth
+         ),
+         Zadj = ((lower-upper) * (Z-min(Z))/(max(Z)-min(Z))) + upper
+         )
+
+plot3d(x=tag$X, y=tag$Y, z=tag$depth, col=1)
+points3d(x=tag$X, y=tag$Y, z=tag$Z, col=2)
+points3d(x=tag$X, y=tag$Y, z=tag$Zadj, col=3)
+
+
+COA[COA$Z>COA$bathz,"Z"]<-COA[COA$Z>COA$bathz,"bathz"]-(COA[COA$Z>COA$bathz,"Z"]-COA[COA$Z>COA$bathz,"bathz"])
+COA$Zadj<-with(COA, ((bathz-ssz)*(Z-min(Z))/(max(Z)-min(Z)))+ssz)
+
+
 
 H.pi <- Hpi(tag, binned = TRUE) * 3
 fhat <- kde(tag, H = H.pi)
 
-
+source("R/vol3d.R")
 vol3d(fhat, cont = 50) ## in m3
 vol3d(fhat, cont = 95)
 
-
 ################################
 ## Plotting 3D KUD and bathymetry
-bath <- crop(bath_ras_utm, extent(stat) + 500) *-1
 
 # ## reconfigure bathymetry data for 3D plotting (** to correct mirrored plotting in rayshader)
 bath_mat <-
-  as.matrix(bath) %>%
+  as.matrix(lodestone_utm) %>%
   apply(., 2, rev)
 
 ## Set depth exaggeration
-depth_exaggeration = 1.5
+depth_exaggeration = 1.2
 
 ## plot bathymetry
 bath_mat %>%
-  sphere_shade(texture = "desert") %>%
+  sphere_shade(texture = "imhof1") %>%
   add_shadow(ray_shade(bath_mat, zscale = 1/depth_exaggeration), 0.1) %>%
   add_shadow(ambient_shade(bath_mat, zscale = 1/depth_exaggeration), 0.1) %>%
   plot_3d(
     bath_mat,
+    baseshape = "rectangle",
     water = T,      ## render water
     zscale = 1/depth_exaggeration,
-    waterdepth = 0,
-    watercolor = "#88DDFF",
-    shadow = FALSE,   ## render shadow on the bottom
-    solid = T,    ## render solid base
     wateralpha = 0.2,
     waterlinecolor = "white",
     waterlinealpha = 0.5,
@@ -127,8 +149,9 @@ bath_mat %>%
   )
 
 ## Plotting using our modified plot_bath() function to control transparency
+source("R/plot_bath.R")
 bath_mat %>%
-  sphere_shade(texture = "desert") %>%
+  sphere_shade(texture = "imhof1") %>%
   add_shadow(ray_shade(bath_mat, zscale = 1/depth_exaggeration), 0.1) %>%
   add_shadow(ambient_shade(bath_mat, zscale = 1/depth_exaggeration), 0.1) %>%
   plot_bath(
@@ -147,33 +170,35 @@ bath_mat %>%
   )
 
 ## Divides COA data into dddn, calculates KUD and then plots it on bathymetry
-coa_df %>%
-  group_by(dddn) %>%
+source("R/add_fkud.R")
+tag %>%
+  as_tibble() %>%
   transmute(lon = X,
             lat = Y,
-            dep = Z) %>%
-  do(
-    add_kud(
-      reef = bath,
-      det = .,
-      zscale = 1,
-      cont = c(95, 50),                        ## you can add multiple contours, but the plot might get a bit cluttered
-      alphavec = c(0.1, 0.9),
-      drawpoints = F,
-      size = 1,
-      # col.pt="black", colors=c("red","red")
-      col.pt = rainbow(4)[as.numeric(.$dddn[1])],
-      colors = rep(rainbow(4)[as.numeric(.$dddn[1])], 2)
-    )
+            dep = -depth) %>%
+  add_fkud(
+    ras = lodestone_utm,
+    det = .,
+    zscale = 1,
+    cont = c(95, 50),                     ## you can add multiple contours, but the plot might get a bit cluttered
+    alphavec = c(0.1, 0.9),
+    drawpoints = T,
+    size = 1,
+    col.pt="black", colors=c("red","red")
   )
 
 ## add receiver stations
-stat %>%
+source("R/add_points.R")
+statinfo %>%
+  filter(installation_name %in% "Lodestone") %>%
+  st_as_sf(coords=c("station_longitude", "station_latitude"), crs=4326) %>%
+  st_transform(crs=32755) %>%
+  as_Spatial() %>%
   data.frame() %>%
   transmute(lon = coords.x1,
             lat = coords.x2,
-            dep = -Depth) %>%      ## the depth data for receivers if you have it otherwise you can plot them just under the water surface (-1)
-  add_points(reef = bath,
+            dep = -10) %>%      ## the depth data for receivers if you have it otherwise you can plot them just under the water surface (-1)
+  add_points(ras = lodestone_utm,
              det = .,
              zscale = 1,
              size = 6,
@@ -189,7 +214,8 @@ legend3d("topright",
          cex=1, inset=c(0.06))
 
 ## add axes
-add_axes(bath,
+source("R/add_axes.R")
+add_axes(lodestone_utm,
          zscale = 1/depth_exaggeration,
          axis.col = grey(0.5))
 
