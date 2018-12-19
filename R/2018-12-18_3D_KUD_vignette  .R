@@ -86,13 +86,6 @@ tag <-
 H.pi <- Hpi(tag, binned = TRUE) * 3
 fhat <- kde(tag, H = H.pi)
 
-## Create function to calculate 50% and 95% 3DKUD area from fhat
-vol3d<-function(fhat, cont=50){
-  ct<-contourLevels(fhat, cont=cont, approx=TRUE)
-  vol.voxel<- prod(sapply(fhat$eval.points, diff)[1,])
-  no.voxel<- sum(fhat$estimate>ct)
-  no.voxel*vol.voxel
-}
 
 vol3d(fhat, cont = 50) ## in m3
 vol3d(fhat, cont = 95)

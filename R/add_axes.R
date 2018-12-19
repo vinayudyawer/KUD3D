@@ -17,17 +17,7 @@
 #' @importFrom rgl bbox3d
 #'
 #' @examples
-#' ## Import detection data
-#' data(IMOSdata)
-#' data(taginfo)
-#' data(statinfo)
-#'
-#' ## Setup data
-#' ATTdata<- setupData(Tag.Detections = tagdata, Tag.Metadata = taginfo, Station.Information = statinfo, source="IMOS")
-#'
-#' ## Estimate Short-term Center of Activities for all individuals
-#' COAdata<- COA(ATTdata)
-#'
+#' TBD
 #'
 
 add_axes <- function(ras, zscale, axis.col = 1, ...){

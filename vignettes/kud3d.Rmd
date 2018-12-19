@@ -1,0 +1,133 @@
+---
+title: "KUD3D User Guide"
+author: "Vinay Udyawer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{KUD3D User Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Installation
+
+```{r, eval=FALSE}
+install.packages("devtools")
+devtools::install_github("vinayudyawer/KUD3D")
+```
+
+The `KUD3D` package consists of helper functions to use in association with the `rayshader` package to visualise 3D kernel utilisation distribution and movement patterns of animals monitored using passive or satellite telemetry.
+
+The majority of the 3D bathymetric plotting will be done using the `rayshader` package. If you dont have that already you can install it like so:
+
+```{r, eval=FALSE}
+install.packages("rayshader")
+
+# To install the latest version from Github (recommended):
+devtools::install_github("tylermorganwall/rayshader")
+```
+
+# Usage
+
+Apart from the `rayshader` and `KUD3D` packages lets load other helpful packages
+
+```{r, eval=TRUE}
+sapply(c("ks",
+         "rgl",
+         "raster",
+         "tidyverse",
+         "lubridate",
+         "sf",
+         "rayshader",
+         "VTrack",
+         "KUD3D"),
+       require, character.only = TRUE)
+
+```
+
+There are a few example datasets in this package that can help understand how to use the new functions
+
+```{r eval=TRUE}
+## Station information
+data(statinfo)
+
+## Tag metadata information
+data(taginfo)
+
+## Detection data
+data(tagdata)
+
+## Bathymetry data for our example data (Sourced from the GBR30 project)
+data(bath)
+```
+
+
+We can use the `VTrack` functions to calculate Center of Activity estimates for passively tracked animals (see [here](http://vinayudyawer.github.io/ATT/docs/ATT_Vignette.html) for details)
+
+```{r, eval=TRUE}
+ATTdata<-setupData(Tag.Detections = tagdata,
+                   Tag.Metadata = taginfo,
+                   Station.Information = statinfo,
+                   source = "VEMCO")
+
+COAdata <- COA(ATTdata = ATTdata,
+               timestep = 60)
+```
+
+
+Lets setup our data so they are all in the correct coordinate projection (from lat/long to meters) so the KUD volumes are in the correct units
+
+```{r, eval=TRUE}
+## Assign coordinate reference systems used here
+ll<-CRS("+proj=longlat +datum=WGS84")    ## WSG84 geographic coordinate system (lat/long)
+utm<-CRS("+init=epsg:32755")             ## Projected coordinate system for the Great Barrier Reef (EPSG 32755; in meters)
+```
+
+Lets setup our tagdata
+
+```{r, eval=TRUE}
+## Use one tagged individual as an example (ID 13792)
+
+tag_ll <-
+  COAdata %>%
+  filter(Tag.ID %in% 13792) %>%
+  st_as_sf(coords = c("Longitude.coa", "Latitude.coa"),
+           crs = 4326)
+
+## transform detection data from lat/long to meters
+tag_utm <- st_transform(tag_ll, crs = 32755)
+```
+
+Now lets set up our bathymetry data
+```{r, eval=T}
+## Convert bath data into a raster for the full GBR region
+gbr30<-rasterFromXYZ(bath, crs=ll)
+
+## crop our bathymetry to just within the reef our tagged animal was monitored (i.e. Lodestone Reef)
+lodestone_ll <- crop(gbr30,
+                     statinfo %>%
+                       filter(installation_name %in% "Lodestone") %>%
+                       st_as_sf(coords=c("station_longitude", "station_latitude"), crs=4326) %>%
+                       as_Spatial() %>% extent() + 0.05)
+
+## project bathymetry raster from lat/long to meters
+lodestone_utm <-
+  gbr30 %>%
+  projectRaster(., crs=utm) %>%
+  crop(.,
+       statinfo %>%
+         filter(installation_name %in% "Lodestone") %>%
+         st_as_sf(coords=c("station_longitude", "station_latitude"), crs=4326) %>%
+         st_transform(crs = 32755) %>%
+         as_Spatial() %>% extent() + 5000)
+
+```
+
+
+
+
+
+
+
+
+
