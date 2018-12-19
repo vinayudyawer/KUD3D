@@ -93,22 +93,26 @@ tag <-
            x = lodestone_utm,
            y = as_Spatial(tag_utm),
            method='bilinear'),
-         Z = case_when(
+         Zadj = case_when(
            depth <= lower ~  lower-(depth-lower),
            depth > lower ~ depth
          ),
-         Zadj = ((lower-upper) * (Z-min(Z))/(max(Z)-min(Z))) + upper
-         )
-
-plot3d(x=tag$X, y=tag$Y, z=tag$depth, col=1)
-points3d(x=tag$X, y=tag$Y, z=tag$Z, col=2)
-points3d(x=tag$X, y=tag$Y, z=tag$Zadj, col=3)
-
-
-COA[COA$Z>COA$bathz,"Z"]<-COA[COA$Z>COA$bathz,"bathz"]-(COA[COA$Z>COA$bathz,"Z"]-COA[COA$Z>COA$bathz,"bathz"])
-COA$Zadj<-with(COA, ((bathz-ssz)*(Z-min(Z))/(max(Z)-min(Z)))+ssz)
+         Z = ((lower-upper) * (Zadj-min(Zadj))/(max(Zadj)-min(Zadj)))
+         ) %>%
+  dplyr::select(X, Y, Z) %>%
+  as.matrix() %>%
+  bezierCurveFit()
 
 
+tag %>%
+  transmute(lon = X,
+            lat = Y,
+            dep = Zadj) %>%      ## the depth data for receivers if you have it otherwise you can plot them just under the water surface (-1)
+  add_points(ras = lodestone_utm,
+             det = .,
+             zscale = 1,
+             size = 2,
+             col = "red")
 
 H.pi <- Hpi(tag, binned = TRUE) * 3
 fhat <- kde(tag, H = H.pi)
