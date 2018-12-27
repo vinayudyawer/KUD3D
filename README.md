@@ -124,8 +124,8 @@ kud_df<-
             Z = - Depth,
             dt = Date.Time)
 
-H.pi <- Hpi(as.matrix(kud_df[1:3]), binned = TRUE)
-fhat <- kde(as.matrix(kud_df[1:3]), H = H.pi)
+H.pi <- Hpi(kud_df[1:3], binned = TRUE)
+fhat <- kde(kud_df[1:3], H = H.pi)
 ```
 
 We can use the `vol3d()` helper function in the `KUD3D` package to quickly estimate volume of particular voxels of our animals 3D KUD
@@ -266,11 +266,10 @@ kud_df<-
 ## Calculate KUD volume during the day
 day_df <-
   kud_df %>%
-  filter(subset %in% "Day") %>%
-  as.matrix()
+  filter(subset %in% "Day")
 
-H.pi_day <- Hpi(day_df[,1:3], binned = TRUE)
-fhat_day <- kde(day_df[,1:3], H = H.pi)
+H.pi_day <- Hpi(day_df[1:3], binned = TRUE)
+fhat_day <- kde(day_df[1:3], H = H.pi)
 
 vol3d(fhat_day, cont = 50) ## in m3
 vol3d(fhat_day, cont = 95)
@@ -278,8 +277,7 @@ vol3d(fhat_day, cont = 95)
 ## Calculate KUD volume during the night
 night_df <-
   kud_df %>%
-  filter(subset %in% "Night") %>%
-  as.matrix()
+  filter(subset %in% "Night")
 
 H.pi_night <- Hpi(df_night[,1:3], binned = TRUE)
 fhat_night <- kde(df_night[,1:3], H = H.pi)
