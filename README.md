@@ -4,7 +4,7 @@
 
 The `KUD3D` package consists of helper functions to use in association with the `rayshader` package to visualise 3D kernel utilisation distribution and movement patterns of animals monitored using passive or satellite telemetry.
 
-<br><br>
+<br>
 
 Installation
 --------------
@@ -23,7 +23,7 @@ install.packages("rayshader")
 devtools::install_github("tylermorganwall/rayshader")
 ```
 
-<br><br>
+<br>
 
 Functions within the package
 ------------
@@ -40,7 +40,7 @@ The `KUD3D` package at the moment comprises of five functions that work in along
 
 5.  **`vol3d()`** Helper function to calculate 3DKUD volume for a `kde` object.
 
-<br><br>
+<br>
 
 Usage
 --------------
@@ -194,12 +194,9 @@ add_axes(ningaloo_utm,
          axis.col = grey(0.5))
 
 ```
-
 <img src="vignettes/images/Fig1.png"/>
 
-
-<br><br>
-
+<br>
 
 Passive telemetry data
 -------------------------
@@ -382,11 +379,9 @@ add_axes(heron_utm,
          axis.col = grey(0.5))
 
 ```
-
 <img src="vignettes/images/Fig2.png"/>
 
-
-<br><br>
+<br>
 
 
 The 3D rgl outputs can be saved as snapshots or interactive WebGL html documents. You can even create short movies using spin animations to highlight different activity spaces and animal movements
@@ -420,17 +415,17 @@ writeSTL("output.STL")
 
 ```
 
-<br><br>
+<br>
 
 ***More functions to calculate and visualise 3D animal movement coming soon!!***
 
-<br><br>
+<br>
 
 # Author
 
 Vinay Udyawer <br> <v.udyawer@aims.gov.au> <br> Australian Institute of Marine Science
 
-<br><br>
+<br>
 
 **Vignette version**
 0.0.1 (20 Dec 2018)
