@@ -42,7 +42,9 @@ vol3d <- function(fhat, cont = NULL) {
 
   no.voxel <- sum(fhat$estimate > ct)
 
-  no.voxel * vol.voxel
+  out <- no.voxel * vol.voxel
+
+  return(out)
 
 }
 
