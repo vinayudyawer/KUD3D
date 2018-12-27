@@ -39,7 +39,7 @@ vol3d <- function(fhat, cont = NULL) {
   if (length(cont) != 1)
     stop("Whoah! one at a time please. I can only calculate volume for one contour at a time.")
 
-  ct <- ks::contourLevels(fhat, cont = cont, approx = TRUE)
+  ct <- contourLevels(fhat, cont = cont, approx = TRUE)
 
   vol.voxel <- prod(sapply(fhat$eval.points, diff)[1, ])
 

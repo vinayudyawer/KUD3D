@@ -36,7 +36,7 @@ add_points <-
            alpha = 0.8,
            line = F,
            ...) {
-    e <- raster::extent(ras)
+    e <- extent(ras)
     cell_size_x <-
       raster::pointDistance(c(e@xmin, e@ymin), c(e@xmax, e@ymin), lonlat = lonlat) / ncol(ras)
     cell_size_y <-
