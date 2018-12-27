@@ -20,7 +20,6 @@
 #' @importFrom rayshader %>%
 #' @importFrom ks Hpi
 #' @importFrom ks kde
-#' @importFrom ks plot.kde
 #'
 #' @export add_fkud
 #'
