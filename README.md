@@ -279,8 +279,8 @@ night_df <-
   kud_df %>%
   filter(subset %in% "Night")
 
-H.pi_night <- Hpi(df_night[,1:3], binned = TRUE)
-fhat_night <- kde(df_night[,1:3], H = H.pi)
+H.pi_night <- Hpi(night_df[,1:3], binned = TRUE)
+fhat_night <- kde(night_df[,1:3], H = H.pi)
 
 vol3d(fhat_night, cont = 50) ## in m3
 vol3d(fhat_night, cont = 95)
