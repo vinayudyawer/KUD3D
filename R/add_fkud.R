@@ -53,8 +53,8 @@ add_fkud <- function(ras,
     ) %>%
     as.matrix()
 
-  H.pi <- ks::Hpi(coa_adj, binned = TRUE) * mul
-  fhat <- ks::kde(coa_adj, H = H.pi)
+  H.pi <- Hpi(coa_adj, binned = TRUE) * mul
+  fhat <- kde(coa_adj, H = H.pi)
 
   plot(
     fhat,
