@@ -14,10 +14,14 @@
 #'
 #' @return Adds points or lines to an existing 3D rayshader plot
 #'
+#' @import raster
+#' @import rgl
 #' @importFrom raster extent
 #' @importFrom raster pointDistance
 #' @importFrom rgl points3d
 #' @importFrom rgl lines3d
+#'
+#' @export add_points
 #'
 #' @examples
 #' TBD

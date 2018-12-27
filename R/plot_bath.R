@@ -30,8 +30,12 @@
 #'@param background Default `grey10`. Color of the background.
 #'@param windowsize Default `c(600,600)`. Width and height of the `rgl` device displaying the plot.
 #'@param ... Additional arguments to pass to the `rgl::par3d` function.
+#'
 #'@import rgl
-#'@export
+#'@import rayshader
+#'
+#'@export plot_bath
+#'
 #'@examples
 #'TBD
 #'

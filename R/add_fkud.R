@@ -12,12 +12,17 @@
 #'
 #' @return Adds 3DKUD voxels to an existing 3D rayshader plot
 #'
+#' @import ks
+#' @import rayshader
+#' @import raster
 #' @importFrom raster extent
 #' @importFrom raster pointDistance
 #' @importFrom rayshader %>%
 #' @importFrom ks Hpi
 #' @importFrom ks kde
 #' @importFrom ks plot.kde
+#'
+#' @export add_fkud
 #'
 #' @examples
 #' TBD
@@ -48,10 +53,10 @@ add_fkud <- function(ras,
     ) %>%
     as.matrix()
 
-  H.pi <- Hpi(coa_adj, binned = TRUE) * mul
-  fhat <- kde(coa_adj, H = H.pi)
+  H.pi <- ks::Hpi(coa_adj, binned = TRUE) * mul
+  fhat <- ks::kde(coa_adj, H = H.pi)
 
-  plot(
+  ks::plot.kde(
     fhat,
     add = TRUE,
     axes = F,
