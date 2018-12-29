@@ -14,7 +14,7 @@ install.packages("devtools")
 devtools::install_github("vinayudyawer/KUD3D")
 ```
 
-The majority of the 3D bathymetric plotting will be done using the `rayshader` package. If you dont have that already you can install it like so:
+The majority of the 3D bathymetric plotting will be done using the `rayshader` package. If you dont have that already you can install it using the following code:
 
 ```r
 install.packages("rayshader")
@@ -28,7 +28,7 @@ devtools::install_github("tylermorganwall/rayshader")
 Functions within the package
 ------------
 
-The `KUD3D` package at the moment comprises of five functions that work in alongside the `rayshader` package:
+The `KUD3D` package at the moment comprises of five functions that work alongside the `rayshader` package:
 
 1.  **`add_bath()`** Displays the shaded map in 3D with the `rgl` package. Altered version of the rayshader `plot_3d()` function to allow adjustment of transparency
 
