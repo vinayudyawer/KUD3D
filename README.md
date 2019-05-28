@@ -32,9 +32,9 @@ The `KUD3D` package at the moment comprises of five functions that work alongsid
 
 1.  **`add_bath()`** Displays the shaded map in 3D with the `rgl` package. Altered version of the rayshader `plot_3d()` function to allow adjustment of transparency
 
-2.  **`add_points()`** Helper function to add points or lines a 3D rayshader plot.
+2.  **`add_points()`** Helper function to add points or lines to a 3D rayshader plot.
 
-3.  **`add_fkud()`** Helper function to add 3DKUD a 3D rayshader plot.
+3.  **`add_fkud()`** Helper function to add 3DKUD to a 3D rayshader plot.
 
 4.  **`add_axes()`** Helper function to add axes to a 3D rayshader plot.
 
