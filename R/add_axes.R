@@ -40,8 +40,8 @@ add_axes <- function(ras, zscale, axis.col = 1, ...){
   labz <- pretty(c(0, min(values(ras))))
 
   ## estimate positions for labels
-  atx <- seq(-ncol(ras), 0, len=length(llabx))
-  aty <- seq(0, nrow(ras), len=length(llaby))
+  atx <- seq(-(ncol(ras)/2), (ncol(ras)/2), len=length(llabx))
+  aty <- seq(-(nrow(ras)/2), (nrow(ras)/2), len=length(llaby))
   atz <- labz / zscale
 
   ## add axes
