@@ -191,7 +191,7 @@ kud_df %>%
 ## add axes
 add_axes(ningaloo_utm,
          zscale = 1/depth_exaggeration,
-         axis.col = grey(0.5))
+         axis.col = c("white" , grey(0.5)))
 
 ```
 <img src="vignettes/images/Fig1.png"/>
@@ -374,7 +374,7 @@ legend3d("topright",
 ## add axes
 add_axes(heron_utm,
          zscale = 1/depth_exaggeration,
-         axis.col = grey(0.5))
+         axis.col = c("white" , grey(0.5)))
 
 ```
 <img src="vignettes/images/Fig2.png"/>
