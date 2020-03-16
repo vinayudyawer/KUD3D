@@ -56,9 +56,9 @@ add_points <-
     )
     if (line) {
       rgl::lines3d(
-        x = distances_y,                     #lat
+        x = distances_y - (nrow(ras)/2),                     #lat
         y = det$dep / zscale,                #depth
-        z = abs(distances_x) - ncol(ras),    #lon
+        z = abs(distances_x) - (ncol(ras)/2),    #lon
         color = col,
         alpha = alpha,
         ...
