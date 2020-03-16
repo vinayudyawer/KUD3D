@@ -211,7 +211,7 @@ data(statinfo)
 
 stat_ll <-
   statinfo %>%
-  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
+  st_as_sf(coords = c("station_longitude", "station_latitude"), crs = 4326)
 
 stat_utm <-
   stat_ll %>%
