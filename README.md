@@ -9,6 +9,8 @@ The `KUD3D` package consists of helper functions to use in association with the 
 Installation
 --------------
 
+Make sure you have an updated version of `R`. This package will function with `R` versions 3.6.0 and above, however some dependencies might require a more updated version.
+
 ```r
 install.packages("devtools")
 devtools::install_github("vinayudyawer/KUD3D")
