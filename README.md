@@ -187,13 +187,15 @@ kud_df %>%
     drawpoints = T,
     size = 1,
     col.pt = "black",
-    colors = c("red","red")
+    colors = c("red","red"),
+    display = "rgl"
   )
 
 ## add axes
 add_axes(ningaloo_utm,
          zscale = 1/depth_exaggeration,
-         axis.col = c("white" , grey(0.5)))
+         axis.col = c("white" , grey(0.5)),
+         back = "culled")
 
 ```
 <img src="vignettes/images/Fig1.png"/>
@@ -343,7 +345,8 @@ kud_df %>%
       drawpoints = F,
       size = 1,
       col.pt = rainbow(2)[as.numeric(.$subset[1])],
-      colors = rep(rainbow(2)[as.numeric(.$subset[1])], 2)
+      colors = rep(rainbow(2)[as.numeric(.$subset[1])], 2),
+      display = "rgl"
     )
   )
 ```
