@@ -152,16 +152,15 @@ bath_mat <-
 
 bath_mat %>%
   sphere_shade(texture = "desert") %>%
-  add_shadow(ray_shade(bath_mat, zscale = 1/depth_exaggeration), 0.1) %>%
-  add_shadow(ambient_shade(bath_mat, zscale = 1/depth_exaggeration), 0.1) %>%
+  add_shadow(ambient_shade(bath_mat, zscale = 1/depth_exaggeration), max_darken = 0.1, rescale_original = T) %>%
   plot_3d(
     bath_mat,
     baseshape = "rectangle",
     water = T,                 ## render water
     zscale = 1/depth_exaggeration,
-    wateralpha = 0.2,
+    wateralpha = 0.1,
     waterlinecolor = "white",
-    waterlinealpha = 0.5,
+    waterlinealpha = 0.2,
     windowsize = c(1200, 700),  ## Size of window
     theta = 80, 
     phi = 20,
@@ -215,7 +214,7 @@ data(statinfo)
 
 stat_ll <-
   statinfo %>%
-  st_as_sf(coords = c("station_longitude", "station_latitude"), crs = 4326)
+  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
 stat_utm <-
   stat_ll %>%
@@ -308,15 +307,16 @@ depth_exaggeration <- 1.5
 ## Plotting using our modified plot_bath() function to control transparency
 bath_mat %>%
   sphere_shade(texture = "desert") %>%
-  add_shadow(ray_shade(bath_mat, zscale = 1/depth_exaggeration), 0.1) %>%
-  add_shadow(ambient_shade(bath_mat, zscale = 1/depth_exaggeration), 0.1) %>%
-  plot_bath(
+  add_shadow(ambient_shade(bath_mat, zscale = 1/depth_exaggeration), max_darken = 0.1, rescale_original = T) %>%
+  plot_3d(
+    solid = F,
+    shadow = F,
     bath_mat,
     water = TRUE,      ## render water surface
     zscale = 1/depth_exaggeration,
-    waterdepth = 0,
-    watercolor = "#88DDFF",
-    wateralpha = 0.2,
+    wateralpha = 0.1,
+    waterlinecolor = "white",
+    waterlinealpha = 0.2,
     windowsize = c(1200, 700),  ## Size of window
     theta = 80,               ## Play around with the theta, phi, fov and zoom to orient the plot (or you can adjust it manually)
     phi = 20,
@@ -379,7 +379,8 @@ legend3d("topright",
 ## add axes
 add_axes(heron_utm,
          zscale = 1/depth_exaggeration,
-         axis.col = c("white" , grey(0.5)))
+         axis.col = c("white" , grey(0.5)),
+         back = "culled")
 
 ```
 <img src="vignettes/images/Fig2.png"/>
@@ -419,9 +420,6 @@ writeSTL("output.STL")
 ```
 
 <br>
-
-***More functions to calculate and visualise 3D animal movement coming soon!!***
-
 <br>
 
 # Author
@@ -431,7 +429,7 @@ Vinay Udyawer <br> <v.udyawer@aims.gov.au> <br> Australian Institute of Marine S
 <br>
 
 **Vignette version**
-0.0.1 (20 Dec 2018)
+2.1 (15 Aug 2023)
 
 
 
