@@ -3,7 +3,6 @@
 export(add_axes)
 export(add_fkud)
 export(add_points)
-export(plot_bath)
 export(vol3d)
 import(ks)
 import(raster)
