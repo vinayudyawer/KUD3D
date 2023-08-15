@@ -167,7 +167,8 @@ kud_df %>%
     drawpoints = T,
     size = 1,
     col.pt = "black",
-    colors = c("red","red")
+    colors = c("red","red"),
+    display = "rgl"
   )
 
 ## add axes
@@ -231,13 +232,13 @@ Now that the data is correctly formatted, lets calculate 3DKUD like we did for t
 ```{r, eval=FALSE}
 ## 3D KUD calculations
 
-kud_df<-
+kud_df <-
   trout_utm %>%
   as_Spatial() %>%
   as_tibble() %>%
   transmute(X = coords.x1,
             Y = coords.x2,
-            Z = - Sensor.Value.coa,
+            Z = -Sensor.Value.coa,
             subset =
               factor(
                 case_when(
@@ -249,8 +250,7 @@ kud_df<-
 ## Calculate KUD volume during the day
 day_df <-
   kud_df %>%
-  filter(subset %in% "Day") %>%
-  as.matrix()
+  filter(subset %in% "Day") 
 
 H.pi_day <- Hpi(day_df[,1:3], binned = TRUE)
 fhat_day <- kde(day_df[,1:3], H = H.pi)
@@ -261,11 +261,10 @@ vol3d(fhat_day, cont = 95)
 ## Calculate KUD volume during the night
 night_df <-
   kud_df %>%
-  filter(subset %in% "Night") %>%
-  as.matrix()
+  filter(subset %in% "Night")
 
-H.pi_night <- Hpi(df_night[,1:3], binned = TRUE)
-fhat_night <- kde(df_night[,1:3], H = H.pi)
+H.pi_night <- Hpi(night_df[,1:3], binned = TRUE)
+fhat_night <- kde(night_df[,1:3], H = H.pi)
 
 vol3d(fhat_night, cont = 50) ## in m3
 vol3d(fhat_night, cont = 95)
@@ -326,7 +325,8 @@ kud_df %>%
       drawpoints = F,
       size = 1,
       col.pt = rainbow(2)[as.numeric(.$subset[1])],
-      colors = rep(rainbow(2)[as.numeric(.$subset[1])], 2)
+      colors = rep(rainbow(2)[as.numeric(.$subset[1])], 2),
+      display = "rgl"
     )
   )
 ```

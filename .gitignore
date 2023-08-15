@@ -25,3 +25,10 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Rproj.user
+.DS_Store
+archive/.DS_Store
+man/.DS_Store
+vignettes/.DS_Store
+vignettes/.DS_Store
+*.icloud
+archive/.DS_Store

@@ -1,7 +1,7 @@
 Package: KUD3D
 Type: Package
 Title: Visualising animal telemetry data in three dimensions
-Version: 0.1.0
+Version: 0.2.0
 Date: 2018-12-18
 Author: Vinay Udyawer
 Maintainer: Vinay Udyawer <v.udyawer@aims.gov>
@@ -13,6 +13,6 @@ Encoding: UTF-8
 LazyData: true
 Suggests: 
     knitr,
-    rmarkdown
+    markdown
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
