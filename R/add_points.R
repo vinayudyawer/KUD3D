@@ -47,7 +47,7 @@ add_points <-
       raster::pointDistance(c(e@xmin, e@ymin), cbind(rep(e@xmin, nrow(det)), det$lat), lonlat = lonlat) / cell_size_y
 
     rgl::points3d(
-      x = distances_y,                       #lat
+      x = distances_y - (nrow(ras)/2),                       #lat
       y = det$dep / zscale,                  #depth
       z = abs(distances_x) - ncol(ras),      #lon
       color = col,
